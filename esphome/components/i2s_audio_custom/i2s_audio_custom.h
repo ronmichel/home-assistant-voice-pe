@@ -2,13 +2,13 @@
 
 #ifdef USE_ESP32
 
-#include "../i2s_audio.h"
-
+#include "esphome/components/i2s_audio/i2s_audio.h"
 #include "esphome/components/microphone/microphone.h"
 #include "esphome/core/component.h"
+#include "esphome/core/ring_buffer.h"
 
 namespace esphome {
-namespace i2s_audio {
+namespace i2s_audio_custom {
 
 class I2SAudioMicrophone : public I2SAudioIn, public microphone::Microphone, public Component {
  public:
