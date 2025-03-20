@@ -14,7 +14,7 @@ static const size_t BUFFER_SIZE = 512;
 
 static const char *const TAG = "i2s_audio.microphone";
 
-void I2SAudioMicrophone::setup() {
+void I2SAudioMicrophoneCustom::setup() {
   ESP_LOGCONFIG(TAG, "Setting up I2S Audio Microphone...");
 #if SOC_I2S_SUPPORTS_ADC
   if (this->adc_) {
@@ -36,14 +36,14 @@ void I2SAudioMicrophone::setup() {
   }
 }
 
-void I2SAudioMicrophone::start() {
+void I2SAudioMicrophoneCustom::start() {
   if (this->is_failed())
     return;
   if (this->state_ == microphone::STATE_RUNNING)
     return;  // Already running
   this->state_ = microphone::STATE_STARTING;
 }
-void I2SAudioMicrophone::start_() {
+void I2SAudioMicrophoneCustom::start_() {
   if (!this->parent_->try_lock()) {
     return;  // Waiting for another i2s to return lock
   }
@@ -116,7 +116,7 @@ void I2SAudioMicrophone::start_() {
   this->status_clear_error();
 }
 
-void I2SAudioMicrophone::stop() {
+void I2SAudioMicrophoneCustom::stop() {
   if (this->state_ == microphone::STATE_STOPPED || this->is_failed())
     return;
   if (this->state_ == microphone::STATE_STARTING) {
@@ -126,7 +126,7 @@ void I2SAudioMicrophone::stop() {
   this->state_ = microphone::STATE_STOPPING;
 }
 
-void I2SAudioMicrophone::stop_() {
+void I2SAudioMicrophoneCustom::stop_() {
   esp_err_t err;
 #if SOC_I2S_SUPPORTS_ADC
   if (this->adc_) {
@@ -156,7 +156,7 @@ void I2SAudioMicrophone::stop_() {
   this->status_clear_error();
 }
 
-size_t I2SAudioMicrophone::read(int16_t *buf, size_t len) {
+size_t I2SAudioMicrophoneCustom::read(int16_t *buf, size_t len) {
   size_t bytes_read = 0;
   esp_err_t err = i2s_read(this->parent_->get_port(), buf, len, &bytes_read, (100 / portTICK_PERIOD_MS));
   if (err != ESP_OK) {
@@ -190,7 +190,7 @@ size_t I2SAudioMicrophone::read(int16_t *buf, size_t len) {
   }
 }
 
-void I2SAudioMicrophone::read_() {
+void I2SAudioMicrophoneCustom::read_() {
   std::vector<int16_t> samples;
   samples.resize(BUFFER_SIZE);
   size_t bytes_read = this->read(samples.data(), BUFFER_SIZE / sizeof(int16_t));
@@ -198,7 +198,7 @@ void I2SAudioMicrophone::read_() {
   this->data_callbacks_.call(samples);
 }
 
-void I2SAudioMicrophone::loop() {
+void I2SAudioMicrophoneCustom::loop() {
   switch (this->state_) {
     case microphone::STATE_STOPPED:
       break;
