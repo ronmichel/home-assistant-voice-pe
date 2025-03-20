@@ -10,7 +10,7 @@
 namespace esphome {
 namespace i2s_audio_custom {
 
-class I2SAudioMicrophone : public I2SAudioIn, public microphone::Microphone, public Component {
+class I2SAudioMicrophoneCustom : public I2SAudioIn, public microphone::Microphone, public Component {
  public:
   void setup() override;
   void start() override;
