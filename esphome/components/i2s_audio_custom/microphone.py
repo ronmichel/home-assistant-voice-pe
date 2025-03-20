@@ -21,6 +21,7 @@ CONF_ADC_PIN = "adc_pin"
 CONF_ADC_TYPE = "adc_type"
 CONF_PDM = "pdm"
 
+i2s_audio_custom_ns = cg.esphome_ns.namespace("i2s_audio_custom")
 
 I2SAudioMicrophoneCustom = i2s_audio_custom_ns.class_("I2SAudioMicrophoneCustom", I2SAudioIn, microphone.Microphone, cg.Component)
 
