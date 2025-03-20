@@ -21,9 +21,9 @@ CONF_ADC_PIN = "adc_pin"
 CONF_ADC_TYPE = "adc_type"
 CONF_PDM = "pdm"
 
-I2SAudioMicrophone = i2s_audio_ns.class_(
-    "I2SAudioMicrophone", I2SAudioIn, microphone.Microphone, cg.Component
-)
+
+I2SAudioMicrophoneCustom = i2s_audio_custom_ns.class_("I2SAudioMicrophoneCustom", I2SAudioIn, microphone.Microphone, cg.Component)
+
 
 INTERNAL_ADC_VARIANTS = [esp32.const.VARIANT_ESP32]
 PDM_VARIANTS = [esp32.const.VARIANT_ESP32, esp32.const.VARIANT_ESP32S3]
@@ -45,7 +45,7 @@ def validate_esp32_variant(config):
 
 BASE_SCHEMA = microphone.MICROPHONE_SCHEMA.extend(
     i2s_audio_component_schema(
-        I2SAudioMicrophone,
+        I2SAudioMicrophoneCustom,
         default_sample_rate=16000,
         default_channel=CONF_RIGHT,
         default_bits_per_sample="32bit",
