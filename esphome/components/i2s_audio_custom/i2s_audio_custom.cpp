@@ -1,4 +1,4 @@
-#include "i2s_audio_microphone.h"
+#include "i2s_audio_custom.h"
 
 #ifdef USE_ESP32
 
@@ -12,7 +12,7 @@ namespace i2s_audio_custom {
 
 static const size_t BUFFER_SIZE = 512;
 
-static const char *const TAG = "i2s_audio.microphone";
+static const char *const TAG = "i2s_audio_custom";
 
 void I2SAudioMicrophone::setup() {
   ESP_LOGCONFIG(TAG, "Setting up I2S Audio Microphone...");
