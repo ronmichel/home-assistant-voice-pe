@@ -8,7 +8,7 @@
 #include "esphome/core/log.h"
 
 namespace esphome {
-namespace i2s_audio {
+namespace i2s_audio_custom {
 
 static const size_t BUFFER_SIZE = 512;
 
