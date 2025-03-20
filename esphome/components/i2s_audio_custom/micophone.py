@@ -5,7 +5,7 @@ from esphome.components.adc import ESP32_VARIANT_ADC1_PIN_TO_CHANNEL, validate_a
 import esphome.config_validation as cv
 from esphome.const import CONF_ID, CONF_NUMBER
 
-from .. import (
+from esphome.components.i2s_audio import (
     CONF_I2S_DIN_PIN,
     CONF_RIGHT,
     I2SAudioIn,
