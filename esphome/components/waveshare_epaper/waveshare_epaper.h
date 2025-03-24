@@ -819,6 +819,8 @@ class WaveshareEPaper7P5InBV3BWR : public WaveshareEPaperBWR {
 
   void clear_screen();
 
+  void set_full_update_every(uint32_t full_update_every);
+
  protected:
   int get_width_internal() override;
 
