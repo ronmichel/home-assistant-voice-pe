@@ -826,8 +826,6 @@ class WaveshareEPaper7P5InBV3BWR : public WaveshareEPaperBWR {
 
   int get_height_internal() override;
   
-  uint32_t idle_timeout_() override;
-
   uint32_t full_update_every_{30};
   uint32_t at_update_{0};
 
