@@ -3203,18 +3203,77 @@ void HOT WaveshareEPaper7P5InBV3BWR::display() {
   this->init_display_();
   const uint32_t buf_len = this->get_buffer_length_() / 2u;
 
-  this->command(0x10);  // Send BW data Transmission
-  delay(2);
-  for (uint32_t i = 0; i < buf_len; i++) {
-    this->data(this->buffer_[i]);
-  }
-
-  this->command(0x13);  // Send red data Transmission
-  delay(2);
-  for (uint32_t i = 0; i < buf_len; i++) {
+  if (this->full_update_every_ == 1) {
+    this->command(0x10);  // Send BW data Transmission
+    delay(2);
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(this->buffer_[i]);
+    }
+    this->command(0x13);  // Send red data Transmission
+    delay(2);
+    for (uint32_t i = 0; i < buf_len; i++) {
     this->data(this->buffer_[i + buf_len]);
+    }
+    this->command(0x12);  // Display Refresh
+    delay(100);           // NOLINT
+    this->wait_until_idle_();
+    this->deep_sleep();
+    return;
   }
+  this->command(0x50);
+  this->data(0xA9);
+  this->data(0x07);
 
+  if (this->at_update_ == 0) {
+    // Enable fast refresh
+    this->command(0xE5);
+    this->data(0x5A);
+
+    this->command(0x92);
+    
+    this->command(0x10);  // Send BW data Transmission
+    delay(2);
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(this->buffer_[i]);
+    }
+
+    this->command(0x13);  // Send red data Transmission
+    delay(2);
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(this->buffer_[i + buf_len]);
+    }
+ } else {
+    this->command(0xE5);
+    this->data(0x6E);
+
+    // Activate partial refresh and set window bounds
+    this->command(0x91);
+    this->command(0x90);
+
+    this->data(0x00);
+    this->data(0x00);
+    this->data((get_width_internal() - 1) >> 8 & 0xFF);
+    this->data((get_width_internal() - 1) & 0xFF);
+
+    this->data(0x00);
+    this->data(0x00);
+    this->data((get_height_internal() - 1) >> 8 & 0xFF);
+    this->data((get_height_internal() - 1) & 0xFF);
+
+    this->data(0x01);
+    this->command(0x10);  // Send BW data Transmission
+    delay(2);
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(this->buffer_[i]);
+    }
+
+    this->command(0x13);  // Send red data Transmission
+    delay(2);
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(this->buffer_[i + buf_len]);
+    } 
+  }  
+  this->at_update_ = (this->at_update_ + 1) % this->full_update_every_;
   this->command(0x12);  // Display Refresh
   delay(100);           // NOLINT
   this->wait_until_idle_();
