@@ -202,6 +202,8 @@ void I2SAudioMicrophone::loop() {
   switch (this->state_) {
     case microphone::STATE_STOPPED:
       break;
+    case microphone::STATE_MUTED:
+      break;
     case microphone::STATE_STARTING:
       this->start_();
       break;
