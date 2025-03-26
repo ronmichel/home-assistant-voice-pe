@@ -3237,6 +3237,27 @@ void HOT WaveshareEPaper7P5InBV3BWR::display() {
       this->data(this->buffer_[i]);
     }
 
+    delay(100);  // NOLINT
+    this->wait_until_idle_();
+    
+    this->command(0x13);// Send BW data Transmission
+    delay(2);
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(this->buffer_[i]);
+    }
+
+    delay(100);  // NOLINT
+    this->wait_until_idle_();
+
+    this->command(0x10);  // Send red data Transmission
+    delay(2);
+    for (uint32_t i = 0; i < buf_len; i++) {
+      this->data(this->buffer_[i + buf_len]);
+    }
+
+    delay(100);  // NOLINT
+    this->wait_until_idle_();
+    
     this->command(0x13);  // Send red data Transmission
     delay(2);
     for (uint32_t i = 0; i < buf_len; i++) {
@@ -3261,17 +3282,21 @@ void HOT WaveshareEPaper7P5InBV3BWR::display() {
     this->data((get_height_internal() - 1) & 0xFF);
 
     this->data(0x01);
-    this->command(0x10);  // Send BW data Transmission
+    
+    this->command(0x13);// Send BW data Transmission
     delay(2);
     for (uint32_t i = 0; i < buf_len; i++) {
       this->data(this->buffer_[i]);
     }
 
+    delay(100);  // NOLINT
+    this->wait_until_idle_();
+    
     this->command(0x13);  // Send red data Transmission
     delay(2);
     for (uint32_t i = 0; i < buf_len; i++) {
       this->data(this->buffer_[i + buf_len]);
-    } 
+    }
   }  
   this->at_update_ = (this->at_update_ + 1) % this->full_update_every_;
   this->command(0x12);  // Display Refresh
